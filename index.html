@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesan Untuk Naya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&family=Playfair+Display:italic,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --accent: #ff758f; --text: #2d3436; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; background: #fff5f7; }
+
+        #btnMusic {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 10001; background: white; border: 2px solid var(--accent);
+            color: var(--accent); padding: 10px 25px; border-radius: 50px;
+            font-weight: 700; cursor: pointer; box-shadow: 0 5px 15px rgba(255,117,143,0.3);
+            transition: 0.3s; font-size: 13px;
+        }
+
+        #setup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #ffffff; z-index: 10000; display: flex; 
+            justify-content: center; align-items: center;
+        }
+
+        .card { text-align: center; max-width: 500px; padding: 40px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--text); margin-bottom: 20px; }
+        
+        #typing-text {
+            font-size: 18px; line-height: 1.8; color: #444; 
+            min-height: 220px; font-style: italic; white-space: pre-wrap;
+        }
+
+        #btnGo {
+            display: none; background: #2d3436; color: white; border: none;
+            padding: 15px 40px; border-radius: 50px; font-weight: 700; cursor: pointer;
+            transition: 0.4s; font-size: 15px; margin-top: 30px;
+        }
+
+        @keyframes strobe { 0% { background: #f00; } 50% { background: #000; } 100% { background: #fff; } }
+        .chaos-mode { animation: strobe 0.04s infinite !important; cursor: none !important; }
+
+        .idiot-window {
+            position: absolute; width: 230px; background: #c0c0c0; border: 2px solid #fff;
+            border-right: 2px solid #000; border-bottom: 2px solid #000; z-index: 9999;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.5); pointer-events: none;
+        }
+        .header { background: #000080; color: white; padding: 4px; font-size: 11px; font-weight: bold; }
+        .body-win { padding: 20px; text-align: center; color: black; font-weight: bold; font-size: 15px; border: 1px solid #808080; margin: 2px; }
+
+        .flying-text {
+            position: fixed; color: yellow; font-weight: 900; z-index: 9998;
+            pointer-events: none; text-shadow: 3px 3px 0 red; white-space: nowrap;
+            animation: fly 2s linear infinite;
+        }
+        @keyframes fly { from { opacity: 1; } to { transform: translate(250px, -250px); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <button id="btnMusic">PUTAR LAGU</button>
+
+    <div id="setup">
+        <div class="card">
+            <h1>Halo Nayaak</h1>
+            <div id="typing-text"></div>
+            <button id="btnGo">LIHAT PUISI Buatan Afgn</button>
+        </div>
+    </div>
+
+    <script>
+        const btnMusic = document.getElementById('btnMusic');
+        const btnGo = document.getElementById('btnGo');
+        const typingElement = document.getElementById('typing-text');
+        
+        const message = "Naya, jujur ya...\nKamu itu sangat sigma dan bikin aku terpesona.\nGak perlu banyak gaya, auramu emang udah beda.\n\nMakasih ya udah hadir dan kasih vibe baru di hidupku.\nSebenernya, aku udah buatin puisi yang paling tulus buat kamu.\n\nCoba klik lagu di atas dulu ya supaya lebih berasa,\nterus klik tombol di bawah buat liat puisinya...";
+
+        let i = 0;
+        let isChaos = false;
+        let laguUtama = null;
+
+        function typeWriter() {
+            if (i < message.length) {
+                typingElement.innerHTML += message.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            } else {
+                btnGo.style.display = 'inline-block';
+            }
+        }
+
+        window.onload = typeWriter;
+
+        // Fungsi putar lagu 1.mp3
+        btnMusic.addEventListener('click', () => {
+            if (!laguUtama) {
+                laguUtama = new Audio('1.mp3');
+                laguUtama.play().catch(() => {});
+                btnMusic.innerHTML = "LAGU SEDANG DIPUTAR";
+                btnMusic.style.background = "#ff758f";
+                btnMusic.style.color = "white";
+            }
+        });
+
+        const sfxOnline = "https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptitle=Scream&filename=24/246411-9a993700-1126-4447-98e3-466d6d79a295.mp3";
+
+        function spawnChaos() {
+            if (!isChaos) return;
+            const win = document.createElement('div');
+            win.className = 'idiot-window';
+            win.style.top = Math.random() * 80 + 'vh';
+            win.style.left = Math.random() * 80 + 'vw';
+            win.innerHTML = `<div class="header">SYSTEM_ERROR</div><div class="body-win">YOU ARE AN IDIOT!</div>`;
+            document.body.appendChild(win);
+
+            const txt = document.createElement('div');
+            txt.className = 'flying-text';
+            txt.style.top = Math.random() * 100 + 'vh';
+            txt.style.left = Math.random() * 100 + 'vw';
+            txt.innerText = "KAMU BODOH!";
+            document.body.appendChild(txt);
+        }
+
+        // Eksekusi Prank
+        btnGo.addEventListener('click', () => {
+            isChaos = true;
+
+            // Mematikan lagu 1.mp3 secara instan
+            if (laguUtama) {
+                laguUtama.pause();
+                laguUtama.currentTime = 0;
+            }
+
+            let el = document.documentElement;
+            if (el.requestFullscreen) el.requestFullscreen();
+            if (el.requestPointerLock) el.requestPointerLock();
+
+            document.body.classList.add('chaos-mode');
+            document.getElementById('setup').style.display = 'none';
+            btnMusic.style.display = 'none';
+
+            // Memulai suara mengganggu
+            const prankSound1 = new Audio('suara1.mp3'); 
+            prankSound1.loop = true; 
+            prankSound1.play();
+
+            const prankSound2 = new Audio(sfxOnline); 
+            prankSound2.loop = true; 
+            prankSound2.play();
+
+            setInterval(spawnChaos, 150);
+
+            setTimeout(() => {
+                isChaos = false;
+                window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+            }, 20000);
+        });
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+    </script>
+</body>
+</html>
